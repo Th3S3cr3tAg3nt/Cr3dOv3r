@@ -28,8 +28,11 @@ else:
 
 parser = argparse.ArgumentParser(prog='Cr3d0v3r.py')
 parser.add_argument("email", help="Email/username to check")
+parser.add_argument("pwd", nargs='?', help="[Password to check]")
 args    = parser.parse_args()
 email   = args.email
+passwd     = args.pwd
+print(passwd)
 version = updater.check()
 if "but" in version:
 	version = version.split("but")[0]+R+"but"+version.split("but")[1]
@@ -134,16 +137,20 @@ def random_banner():
 
 def main():
 	random_banner()
-	print("\n"+W+"["+G+"+"+W+"]"+B+" Checking email in public leaks...")
-	if ispwned.check(email):
-		to_print = ispwned.parse_data(email)
-		colors   = {"(C)":C,"(W)":W,"(B)":B,"(Y)":Y,"(G)":G,"(R)":R,"(M)":M,"(end)":end}
-		for color in list(colors.keys()):
-			to_print = to_print.replace(color,colors[color])
-		print(to_print)
-	else:
-		print(C+"[!] "+R+"Email not found in any public leaks!\n")
-	pwd   = getpass(C+"Please enter the password"+W+"=> ")
+	try:
+		pwd = passwd
+	except NameError:
+		print ('pwd not defined')
+		print("\n"+W+"["+G+"+"+W+"]"+B+" Checking email in public leaks...")
+		if ispwned.check(email):
+			to_print = ispwned.parse_data(email)
+			colors   = {"(C)":C,"(W)":W,"(B)":B,"(Y)":Y,"(G)":G,"(R)":R,"(M)":M,"(end)":end}
+			for color in list(colors.keys()):
+				to_print = to_print.replace(color,colors[color])
+			print(to_print)
+		else:
+			print(C+"[!] "+R+"Email not found in any public leaks!\n")
+		pwd   = getpass(C+"Please enter the password"+W+"=> ")
 
 	print("\n"+W+"["+G+"+"+W+"]"+B+" Testing websites with one form (" + str(len(web1)) + ")!")
 	for wd in web1:
